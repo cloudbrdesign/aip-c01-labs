@@ -1,0 +1,10 @@
+# Dependencies for the Episode 3 lab.
+#
+# Install into an isolated virtual environment - see SETUP.md. Do not install
+# these into your system Python.
+#
+# boto3 is the AWS SDK for Python. The lab uses one operation from it.
+# The lower bound is set well after the Converse API became available; the upper
+# bound keeps a future major release from changing behaviour underneath the lab.
+# Validated against boto3 1.43.79 on 2026-08-25.
+boto3>=1.35.0,<2.0.0

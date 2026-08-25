@@ -1,0 +1,73 @@
+{
+  "capture": "pass 1 - initial validation",
+  "captured_utc": "2026-08-25T05:27:02Z",
+  "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "region": "us-east-1",
+  "note": "Captured in a sandbox account. Account id, principal ARN, credentials, request ids and the capturing profile are deliberately absent.",
+  "results": [
+    {
+      "request": "request_1",
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "declared_max_tokens": 200,
+      "reached_service": true,
+      "inference_ran": true,
+      "complete": true,
+      "state": "ANSWERED",
+      "termination_signal": "end_turn",
+      "text": "acknowledged.",
+      "usage": {
+        "inputTokens": 15,
+        "outputTokens": 5,
+        "totalTokens": 20,
+        "cacheReadInputTokens": 0,
+        "cacheWriteInputTokens": 0
+      },
+      "detail": "the model finished"
+    },
+    {
+      "request": "request_2",
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "declared_max_tokens": 24,
+      "reached_service": true,
+      "inference_ran": true,
+      "complete": false,
+      "state": "ANSWERED",
+      "termination_signal": "max_tokens",
+      "text": "# Provisioning a Compliance Audit Trail: A Comprehensive Guide\n\n## Introduction\n\nA compliance audit trail is",
+      "usage": {
+        "inputTokens": 27,
+        "outputTokens": 24,
+        "totalTokens": 51,
+        "cacheReadInputTokens": 0,
+        "cacheWriteInputTokens": 0
+      },
+      "detail": "generation reached an output ceiling - yours or the model's"
+    },
+    {
+      "request": "request_3",
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "declared_max_tokens": 999999,
+      "reached_service": true,
+      "inference_ran": false,
+      "complete": false,
+      "state": "REJECTED",
+      "termination_signal": null,
+      "text": null,
+      "usage": null,
+      "detail": "ValidationException (HTTP 400): The maximum tokens you requested exceeds the model limit of 64000. Try again with a maximum tokens value that is lower than 64000."
+    },
+    {
+      "request": "client_side_demonstrator",
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "declared_max_tokens": 0,
+      "reached_service": false,
+      "inference_ran": false,
+      "complete": false,
+      "state": "NOT_SENT",
+      "termination_signal": null,
+      "text": null,
+      "usage": null,
+      "detail": "client-side parameter validation: Parameter validation failed:\nInvalid value for parameter inferenceConfig.maxTokens, value: 0, valid min value: 1"
+    }
+  ]
+}
