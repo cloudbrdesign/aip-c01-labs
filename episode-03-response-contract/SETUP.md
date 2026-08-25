@@ -48,7 +48,7 @@ up on the AWS side.
 ## Path A — Quick start
 
 ```bash
-git clone https://github.com/Hudsonekwoge/aip-c01-labs.git
+git clone https://github.com/cloudbrdesign/aip-c01-labs.git
 cd aip-c01-labs/episode-03-response-contract
 
 python3 --version                      # need 3.9+
@@ -74,7 +74,7 @@ Same sequence, explained. Roughly ten minutes.
 ### 1. Get the files
 
 ```bash
-git clone https://github.com/Hudsonekwoge/aip-c01-labs.git
+git clone https://github.com/cloudbrdesign/aip-c01-labs.git
 cd aip-c01-labs/episode-03-response-contract
 ```
 
