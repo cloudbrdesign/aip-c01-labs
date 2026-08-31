@@ -1,0 +1,90 @@
+{
+  "_about": "Machine-readable rule -> source register for the Episode 5 measurement-design checker. Consumed by scripts/check_design.py for citations, and by the Episode 5 pre-slide currency gate to identify which AWS relationships must be re-verified.",
+  "retrieved": "2026-08-31",
+  "sources": {
+    "S-DATASETMETRIC": {
+      "title": "Amazon Bedrock API Reference - EvaluationDatasetMetricConfig",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_EvaluationDatasetMetricConfig.html",
+      "supports": ["R1", "R2", "R5"],
+      "relationship": "metricNames valid values differ depending on whether the job uses a model as judge; metricNames array bounds"
+    },
+    "S-AUTOEVALCONFIG": {
+      "title": "Amazon Bedrock API Reference - AutomatedEvaluationConfig",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_AutomatedEvaluationConfig.html",
+      "supports": ["R4"],
+      "relationship": "datasetMetricConfigs array bounds; evaluatorModelConfig is an optional member that computes the evaluation metrics"
+    },
+    "S-PROMPTDATASETS": {
+      "title": "Amazon Bedrock User Guide - Use prompt datasets for model evaluation",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-prompt-datasets.html",
+      "supports": ["R3", "R6"],
+      "relationship": "referenceResponse is required for accuracy and robustness evaluations in a custom prompt dataset; custom dataset prompt limit"
+    },
+    "S-JUDGEDATASETS": {
+      "title": "Amazon Bedrock User Guide - Create a prompt dataset for a model evaluation job that uses a model as judge",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-prompt-datasets-judge.html",
+      "supports": ["R6", "R7"],
+      "relationship": "referenceResponse is optional for judge jobs; one unique modelIdentifier per job when supplying your own inference responses; dataset prompt limit"
+    }
+  },
+  "rules": {
+    "R1": {
+      "weight": "primary",
+      "condition": "When evaluatorModelConfig is absent, every entry in metricNames must be one of the metric names AWS documents as valid for automated model evaluation jobs.",
+      "documented_set": ["Builtin.Accuracy", "Builtin.Robustness", "Builtin.Toxicity"],
+      "source": "S-DATASETMETRIC"
+    },
+    "R2": {
+      "weight": "primary",
+      "condition": "When evaluatorModelConfig is present, every entry in metricNames must be one of the metric names AWS documents as available to model evaluation jobs that use a model as judge.",
+      "documented_set": ["Builtin.Correctness", "Builtin.Completeness", "Builtin.Faithfulness", "Builtin.Helpfulness", "Builtin.Coherence", "Builtin.Relevance", "Builtin.FollowingInstructions", "Builtin.ProfessionalStyleAndTone", "Builtin.Harmfulness", "Builtin.Stereotyping", "Builtin.Refusal"],
+      "source": "S-DATASETMETRIC"
+    },
+    "R3": {
+      "weight": "primary",
+      "condition": "When a custom prompt dataset is used with Builtin.Accuracy or Builtin.Robustness, every record must carry referenceResponse.",
+      "source": "S-PROMPTDATASETS"
+    },
+    "R4": {
+      "weight": "secondary",
+      "condition": "datasetMetricConfigs must contain between 1 and 5 items.",
+      "min": 1, "max": 5,
+      "source": "S-AUTOEVALCONFIG"
+    },
+    "R5": {
+      "weight": "secondary",
+      "condition": "metricNames must contain between 1 and 25 items.",
+      "min": 1, "max": 25,
+      "source": "S-DATASETMETRIC"
+    },
+    "R6": {
+      "weight": "secondary",
+      "condition": "A custom prompt dataset may contain at most 1000 prompts.",
+      "max": 1000,
+      "source": "S-PROMPTDATASETS"
+    },
+    "R7": {
+      "weight": "secondary",
+      "condition": "When supplying your own inference responses, exactly one unique modelIdentifier may appear, and every record must carry it.",
+      "source": "S-JUDGEDATASETS"
+    }
+  },
+  "not_rules": {
+    "N1": {
+      "subject": "taskType valid values",
+      "why_not_enforced": "The API reference lists Summarization, Classification, QuestionAndAnswer, Generation and Custom. AWS's own model-as-a-judge examples use taskType 'General', which is not in that list. The evidence contradicts itself, so no taskType value is accepted or rejected here."
+    },
+    "N2": {
+      "subject": "built-in dataset name casing",
+      "why_not_enforced": "AWS documentation shows both Builtin.BOLD and Builtin.Bold for the same dataset. Dataset name spelling is therefore not checked."
+    },
+    "N3": {
+      "subject": "task type to dataset pairing",
+      "why_not_enforced": "AWS documents which datasets are recommended for a task type and which the console offers. It does not document the pairing as a constraint, so it is not enforced as one."
+    },
+    "N4": {
+      "subject": "whether the measurement is appropriate to your intent",
+      "why_not_enforced": "This is a judgement, not a documented constraint. No part of this checker can decide it. A configuration can satisfy every rule above and still measure something other than what you set out to learn."
+    }
+  }
+}

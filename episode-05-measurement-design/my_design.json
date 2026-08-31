@@ -1,0 +1,36 @@
+{
+  "_README": [
+    "This is YOUR measurement design. Edit ONLY the five values marked <CHOICE n: ...>.",
+    "The JSON structure is already valid. Do not add, remove or move braces, brackets or commas.",
+    "If you break the structure the checker will say so and call it a TOOLING problem - it is not",
+    "part of the exercise.",
+    "",
+    "The evaluationConfig block below mirrors the shape Amazon Bedrock's CreateEvaluationJob",
+    "request uses. The _lab block does not - it exists only so this lab can run with no AWS",
+    "account. LAB_GUIDE.md shows the real request alongside it."
+  ],
+
+  "evaluationConfig": {
+    "automated": {
+      "datasetMetricConfigs": [
+        {
+          "taskType": "<CHOICE 1: what kind of task is the model performing?>",
+
+          "dataset": {
+            "name": "<CHOICE 2: a name for your own dataset, or a Builtin.* dataset name>"
+          },
+
+          "metricNames": [
+            "<CHOICE 3: one or more metric names. Add more strings to this list if you want more.>"
+          ]
+        }
+      ],
+
+      "evaluatorModelConfig": "<CHOICE 4: null   OR   USE_JUDGE_MODEL>"
+    }
+  },
+
+  "_lab": {
+    "datasetFile": "<CHOICE 5: prompts_with_reference.jsonl   OR   prompts_no_reference.jsonl>"
+  }
+}

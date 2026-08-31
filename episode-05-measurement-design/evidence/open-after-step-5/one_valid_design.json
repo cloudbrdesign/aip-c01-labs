@@ -1,0 +1,26 @@
+{
+  "_README": [
+    "ONE valid design. Not THE valid design. Read WHY_THIS_IS_LEGAL.md beside it.",
+    "It is legal under every rule the checker enforces. That is all it is."
+  ],
+  "evaluationConfig": {
+    "automated": {
+      "datasetMetricConfigs": [
+        {
+          "taskType": "Summarization",
+          "dataset": {
+            "name": "handover-summaries-v1"
+          },
+          "metricNames": [
+            "Builtin.Faithfulness",
+            "Builtin.Completeness"
+          ]
+        }
+      ],
+      "evaluatorModelConfig": "USE_JUDGE_MODEL"
+    }
+  },
+  "_lab": {
+    "datasetFile": "prompts_no_reference.jsonl"
+  }
+}

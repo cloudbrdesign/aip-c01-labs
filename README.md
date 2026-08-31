@@ -11,13 +11,14 @@ predict what it will do, run it, and find out where your model of the system was
 | Lab | Episode | What you build |
 |---|---|---|
 | [`episode-03-response-contract/`](episode-03-response-contract/) | Episode 3 | An FM API interface, and a contract that can represent everything the API it wraps can return |
+| [`episode-05-measurement-design/`](episode-05-measurement-design/) | Episode 5 | A measurement instrument — what you evaluate, on what, and by what rule — checked against constraints AWS documents. **Local, $0, no AWS account.** |
 
 ## What these labs are like
 
 - **Cheap.** Costs are stated per lab. Where a lab creates no resource at all, it says so and
   explains why that claim is worth checking.
-- **Yours to run.** Your account, your credentials, your Region, your model. No lab depends on
-  our account, our resource ids, or any private infrastructure.
+- **Yours to run.** Where a lab touches AWS it uses your account, your credentials, your Region and
+  your model — never ours, and never any private infrastructure. Some labs touch AWS not at all.
 - **Cleaned up.** Every lab states what it creates and how to confirm nothing was left behind.
 - **Honest about their edges.** Where something is unverified or deliberately out of scope, the
   lab says so instead of implying coverage it does not have.
@@ -25,18 +26,16 @@ predict what it will do, run it, and find out where your model of the system was
 ## Advanced concepts; accessible execution
 
 The difficulty in these labs comes from the engineering problem, never from guessing how to run
-them. Each lab ships a **Quick start** for people who set up Python projects routinely and a
-**Guided setup** that explains every command, covers macOS, Linux and Windows, and says what to do
-when a step fails. Both routes reach the same experiment — the engineering is not simplified for
-anyone.
+them. Setup instructions explain every command, cover macOS, Linux and Windows, and say what to do
+when a step fails — without simplifying the engineering for anyone.
 
-Each lab also ships a **preflight check** that confirms your environment is ready before you begin,
-so a missing package or an unset Region never gets mistaken for a result.
+Every lab ships a **preflight check** that confirms your environment is ready before you begin, so a
+missing package or an unset Region never gets mistaken for a result.
 
 ## Before you start any lab
 
-Read that lab's `README.md` first, then its `SETUP.md`. Between them they state time, cost,
-prerequisites and where to begin. Labs are meant to be done in step order — several depend on you
+Read that lab's `README.md` first. It states time, cost, prerequisites and where to begin, and
+points at a `SETUP.md` where the lab needs one. Labs are meant to be done in step order — several depend on you
 committing to a prediction before you run anything, and reading ahead removes the only interesting
 part.
 
