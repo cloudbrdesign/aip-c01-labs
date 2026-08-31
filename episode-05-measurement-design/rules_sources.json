@@ -5,25 +5,37 @@
     "S-DATASETMETRIC": {
       "title": "Amazon Bedrock API Reference - EvaluationDatasetMetricConfig",
       "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_EvaluationDatasetMetricConfig.html",
-      "supports": ["R1", "R2", "R5"],
+      "supports": [
+        "R1",
+        "R2",
+        "R5"
+      ],
       "relationship": "metricNames valid values differ depending on whether the job uses a model as judge; metricNames array bounds"
     },
     "S-AUTOEVALCONFIG": {
       "title": "Amazon Bedrock API Reference - AutomatedEvaluationConfig",
       "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_AutomatedEvaluationConfig.html",
-      "supports": ["R4"],
+      "supports": [
+        "R4"
+      ],
       "relationship": "datasetMetricConfigs array bounds; evaluatorModelConfig is an optional member that computes the evaluation metrics"
     },
     "S-PROMPTDATASETS": {
       "title": "Amazon Bedrock User Guide - Use prompt datasets for model evaluation",
       "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-prompt-datasets.html",
-      "supports": ["R3", "R6"],
+      "supports": [
+        "R3",
+        "R6"
+      ],
       "relationship": "referenceResponse is required for accuracy and robustness evaluations in a custom prompt dataset; custom dataset prompt limit"
     },
     "S-JUDGEDATASETS": {
       "title": "Amazon Bedrock User Guide - Create a prompt dataset for a model evaluation job that uses a model as judge",
       "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-prompt-datasets-judge.html",
-      "supports": ["R6", "R7"],
+      "supports": [
+        "R6",
+        "R7"
+      ],
       "relationship": "referenceResponse is optional for judge jobs; one unique modelIdentifier per job when supplying your own inference responses; dataset prompt limit"
     }
   },
@@ -31,14 +43,36 @@
     "R1": {
       "weight": "primary",
       "condition": "When evaluatorModelConfig is absent, every entry in metricNames must be one of the metric names AWS documents as valid for automated model evaluation jobs.",
-      "documented_set": ["Builtin.Accuracy", "Builtin.Robustness", "Builtin.Toxicity"],
+      "documented_set": [
+        "Builtin.Accuracy",
+        "Builtin.Robustness",
+        "Builtin.Toxicity"
+      ],
       "source": "S-DATASETMETRIC"
     },
     "R2": {
       "weight": "primary",
-      "condition": "When evaluatorModelConfig is present, every entry in metricNames must be one of the metric names AWS documents as available to model evaluation jobs that use a model as judge.",
-      "documented_set": ["Builtin.Correctness", "Builtin.Completeness", "Builtin.Faithfulness", "Builtin.Helpfulness", "Builtin.Coherence", "Builtin.Relevance", "Builtin.FollowingInstructions", "Builtin.ProfessionalStyleAndTone", "Builtin.Harmfulness", "Builtin.Stereotyping", "Builtin.Refusal"],
-      "source": "S-DATASETMETRIC"
+      "condition": "When evaluatorModelConfig is present, every entry in metricNames must be a metric name AWS documents as valid for some model evaluation configuration - that is, either the judge-metric set or the automated-metric set. A name in neither documented set is not a valid value under any reading.",
+      "documented_set": [
+        "Builtin.Correctness",
+        "Builtin.Completeness",
+        "Builtin.Faithfulness",
+        "Builtin.Helpfulness",
+        "Builtin.Coherence",
+        "Builtin.Relevance",
+        "Builtin.FollowingInstructions",
+        "Builtin.ProfessionalStyleAndTone",
+        "Builtin.Harmfulness",
+        "Builtin.Stereotyping",
+        "Builtin.Refusal"
+      ],
+      "also_accepted_when_evaluator_present": [
+        "Builtin.Accuracy",
+        "Builtin.Robustness",
+        "Builtin.Toxicity"
+      ],
+      "source": "S-DATASETMETRIC",
+      "scope_note": "CORRECTED 2026-08-31. This rule previously rejected Builtin.Accuracy, Builtin.Robustness and Builtin.Toxicity whenever an evaluator model was configured. That reverse exclusivity is NOT documented - see not_rules.N5. Only the forward prerequisite is enforced, and it is enforced by R1."
     },
     "R3": {
       "weight": "primary",
@@ -48,13 +82,15 @@
     "R4": {
       "weight": "secondary",
       "condition": "datasetMetricConfigs must contain between 1 and 5 items.",
-      "min": 1, "max": 5,
+      "min": 1,
+      "max": 5,
       "source": "S-AUTOEVALCONFIG"
     },
     "R5": {
       "weight": "secondary",
       "condition": "metricNames must contain between 1 and 25 items.",
-      "min": 1, "max": 25,
+      "min": 1,
+      "max": 25,
       "source": "S-DATASETMETRIC"
     },
     "R6": {
@@ -85,6 +121,10 @@
     "N4": {
       "subject": "whether the measurement is appropriate to your intent",
       "why_not_enforced": "This is a judgement, not a documented constraint. No part of this checker can decide it. A configuration can satisfy every rule above and still measure something other than what you set out to learn."
+    },
+    "N5": {
+      "subject": "whether configuring an evaluator model makes the automated metric names invalid",
+      "why_not_enforced": "AWS documents one metric set for automated model evaluation jobs (Builtin.Accuracy, Builtin.Robustness, Builtin.Toxicity) and another for jobs that use a model as judge. It states that three responsible-AI metrics are available 'only for' judge jobs - an explicit, one-directional restriction. It does not state the reverse: that the automated names stop being valid once an evaluator is configured. The API also nests judge jobs inside 'automated', which makes the phrase 'automated model evaluation jobs' ambiguous about whether it includes them. Listing different sets for different configurations is not the same as declaring them mutually exclusive, so this checker does not treat it as one - and does not warn about it either, because a warning would still imply the checker knows something it does not."
     }
   }
 }

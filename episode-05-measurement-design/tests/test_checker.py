@@ -29,6 +29,20 @@ WITH_REF = [json.loads(l) for l in (LAB / "prompts_with_reference.jsonl").read_t
 NO_REF = [json.loads(l) for l in (LAB / "prompts_no_reference.jsonl").read_text().splitlines() if l.strip()]
 
 
+
+def code_only(path):
+    """Source with docstrings and comments stripped, so prose cannot trip a code scan.
+    Comments do not survive ast.parse; docstrings are removed explicitly."""
+    import ast
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
+            if (node.body and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)
+                    and isinstance(node.body[0].value.value, str)):
+                node.body.pop(0)
+    return ast.unparse(tree)
+
 def design(metrics, evaluator=None, task="Summarization", ds="handover-summaries", n_cfg=1):
     cfg = {"taskType": task, "dataset": {"name": ds}, "metricNames": list(metrics)}
     return {"evaluationConfig": {"automated": {
@@ -67,9 +81,31 @@ class Functional(unittest.TestCase):
         d = [f.detail for f in c.findings if f.rule_id == "R1"][0]
         self.assertIn("model as judge", d)
 
-    def test_R2_fires_automatic_metric_with_evaluator(self):
-        c = run(design(["Builtin.Accuracy"], evaluator="USE_JUDGE_MODEL"), NO_REF)
+    def test_R2_accepts_an_undocumented_name_never(self):
+        """R2 now checks only that a name is documented for SOME configuration."""
+        c = run(design(["Builtin.NotARealMetric"], evaluator="USE_JUDGE_MODEL"), NO_REF)
         self.assertIn("R2", ids(c))
+
+    def test_R2_does_not_reject_automated_names_when_evaluator_present(self):
+        """CORRECTED 2026-08-31. AWS documents different metric sets for different
+        configurations; it does not document them as mutually exclusive. See N5."""
+        for m in ("Builtin.Accuracy", "Builtin.Robustness", "Builtin.Toxicity"):
+            c = run(design([m], evaluator="USE_JUDGE_MODEL"), WITH_REF)
+            self.assertEqual(c.findings, [],
+                             msg=f"{m} was rejected with an evaluator present: "
+                                 f"{[f.detail for f in c.findings]}")
+
+    def test_no_warning_channel_exists_for_the_unsupported_inference(self):
+        """A warning would still imply the checker knows the configuration is questionable."""
+        src = code_only(LAB / "scripts" / "check_design.py").lower()
+        for w in ("warn", "caution", "suspicious", "questionable", "unusual"):
+            self.assertNotIn(w, src, msg=f"checker emits a {w!r} channel")
+
+    def test_R1_still_enforces_the_documented_forward_direction(self):
+        """The direction AWS states explicitly: judge-specific metrics need an evaluator."""
+        for m in ("Builtin.Harmfulness", "Builtin.Stereotyping", "Builtin.Refusal",
+                  "Builtin.Correctness", "Builtin.Faithfulness"):
+            self.assertIn("R1", ids(run(design([m]), NO_REF)), msg=f"{m} passed without an evaluator")
 
     def test_R3_fires_accuracy_on_dataset_without_reference(self):
         """The lab's second predicted error."""
@@ -300,18 +336,7 @@ class Boundary(unittest.TestCase):
         "get_caller_identity", ".aws/credentials", ".aws/config", "os.environ",
     )
 
-    @staticmethod
-    def _code_only(path):
-        """Source with docstrings and comments stripped, so prose cannot trip the scan."""
-        import ast
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
-                if (node.body and isinstance(node.body[0], ast.Expr)
-                        and isinstance(node.body[0].value, ast.Constant)
-                        and isinstance(node.body[0].value.value, str)):
-                    node.body.pop(0)
-        return ast.unparse(tree)
+    _code_only = staticmethod(code_only)
 
     def test_no_aws_call_surface_anywhere(self):
         for p in LAB.rglob("*.py"):

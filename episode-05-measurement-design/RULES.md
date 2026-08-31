@@ -21,7 +21,7 @@ here is inferred, and nothing was added to make the exercise harder.
 
 | Rule | Condition | Source |
 |---|---|---|
-| **R2** | When `evaluatorModelConfig` is **present**, every `metricNames` entry must be one of the eleven names AWS documents for model evaluation jobs that use a model as judge. Three of them — `Builtin.Harmfulness`, `Builtin.Stereotyping`, `Builtin.Refusal` — AWS documents as available *only* in that configuration. | `S-DATASETMETRIC` |
+| **R2** | When `evaluatorModelConfig` is **present**, every `metricNames` entry must be a name AWS documents as valid for *some* model evaluation configuration — the judge set or the automated set. A name in neither is not a valid value under any reading. **Corrected 2026-08-31 — see N5.** | `S-DATASETMETRIC` |
 | **R4** | `datasetMetricConfigs` holds between 1 and 5 items. | `S-AUTOEVALCONFIG` |
 | **R5** | `metricNames` holds between 1 and 25 items. | `S-DATASETMETRIC` |
 | **R6** | A custom prompt dataset holds at most 1000 prompts. | `S-PROMPTDATASETS` |
@@ -34,7 +34,7 @@ you have a counting problem, not a design problem.
 
 ## Deliberately NOT enforced
 
-A validator should enforce what its evidence supports, and no more. These four are left alone on
+A validator should enforce what its evidence supports, and no more. These are left alone on
 purpose, and the checker says so every time it runs.
 
 ### N1 — `taskType` values are not checked
@@ -55,6 +55,28 @@ The same dataset appears in AWS's documentation as both `Builtin.BOLD` and `Buil
 AWS documents which datasets are *recommended* for a task type, and which ones the console
 *offers* once you pick one. **Recommended is not required.** Enforcing it would invent a
 constraint.
+
+### N5 — whether an evaluator model makes the automated metric names invalid is not checked
+
+AWS documents one set of metric names for automated model evaluation jobs — `Builtin.Accuracy`,
+`Builtin.Robustness`, `Builtin.Toxicity` — and another for jobs that use a model as judge. It says
+three responsible-AI metrics are available *"only for"* judge jobs, which is an explicit,
+**one-directional** restriction, and R1 enforces that direction.
+
+**It does not say the reverse.** Nothing states that the automated names stop being valid once an
+evaluator is configured. The API also nests judge jobs *inside* `automated`, which leaves the phrase
+"automated model evaluation jobs" genuinely ambiguous about whether it includes them.
+
+**Listing different sets for different configurations is not the same as declaring them mutually
+exclusive**, so this checker no longer treats it as one.
+
+**It does not warn about it either.** A warning would still imply the checker knows your
+configuration is questionable, and it does not know that.
+
+> **Corrected 2026-08-31, after publication.** An earlier version of R2 rejected
+> `Builtin.Accuracy`, `Builtin.Robustness` and `Builtin.Toxicity` whenever an evaluator model was
+> configured. That was an inference presented as a documented constraint. It has been removed. R1
+> and R3 are unchanged, and the exercise is unchanged.
 
 ### N4 — whether your design measures what you meant is not checked, and cannot be
 

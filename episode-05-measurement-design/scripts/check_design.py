@@ -176,12 +176,18 @@ def run_rules(design, records, dataset_is_builtin, register):
 
         # ---- R1 / R2: metric name legality, conditioned on the evaluator
         if evaluator_present:
+            # R2 checks only that a name is documented SOMEWHERE for a model evaluation job.
+            # It deliberately does NOT reject the automated names when an evaluator is present:
+            # AWS documents different sets for different configurations, which is not the same as
+            # documenting them as mutually exclusive. See N5 in RULES.md. No warning is emitted
+            # either - a warning would still imply this checker knows the answer.
             c.note("R2")
+            documented_anywhere = judge_set | auto_set
             for m in metrics:
-                if m not in judge_set:
-                    c.flag("R2", f"{where}.metricNames contains '{m}'. evaluatorModelConfig is "
-                                 f"present, and '{m}' is not among the metric names AWS documents "
-                                 f"as available to model evaluation jobs that use a model as judge.")
+                if m not in documented_anywhere:
+                    c.flag("R2", f"{where}.metricNames contains '{m}'. It is not among the metric "
+                                 f"names AWS documents as valid for any model evaluation "
+                                 f"configuration.")
         else:
             c.note("R1")
             for m in metrics:
@@ -322,7 +328,7 @@ def main():
     if not args.quiet:
         print(LINE)
         print("What this result does not establish:")
-        for key in ("N1", "N2", "N3", "N4"):
+        for key in ("N1", "N2", "N3", "N4", "N5"):
             n = register["not_rules"][key]
             print(f"  {key}  {n['subject']}")
         print("  See RULES.md for why each is left unchecked.")
