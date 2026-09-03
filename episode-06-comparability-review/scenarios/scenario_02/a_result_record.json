@@ -1,0 +1,26 @@
+{
+  "_about": "Synthetic local artifact, course-authored. Shape follows AWS's documented automatic model evaluation S3 output. Structure traces to SOURCE_MAP.json; the values are invented for this exercise and are NOT observed AWS results.",
+  "s3_key": "s3://amzn-s3-demo-bucket/output/boolq-run-one/3ab90c17de55/models/arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-text-lite-v1/taskTypes/QuestionAndAnswer/datasets/Builtin.BoolQ/0000_output.jsonl",
+  "records": [
+    {
+      "automatedEvaluationResult": {
+        "scores": [
+          {
+            "metricName": "Builtin.Accuracy",
+            "result": 0.662
+          }
+        ]
+      },
+      "inputRecord": {
+        "prompt": "Aurillac is the capital of",
+        "referenceResponse": "Cantal"
+      },
+      "modelResponses": [
+        {
+          "modelIdentifier": "arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-text-lite-v1",
+          "response": " A short model response, invented for this exercise."
+        }
+      ]
+    }
+  ]
+}

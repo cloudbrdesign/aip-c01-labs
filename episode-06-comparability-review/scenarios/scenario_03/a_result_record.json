@@ -1,0 +1,26 @@
+{
+  "_about": "Synthetic local artifact, course-authored. Shape follows AWS's documented automatic model evaluation S3 output. Structure traces to SOURCE_MAP.json; the values are invented for this exercise and are NOT observed AWS results.",
+  "s3_key": "s3://amzn-s3-demo-bucket/output/trivia-eval-first/9c4471ba02fe/models/arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-text-lite-v1/taskTypes/QuestionAndAnswer/datasets/Builtin.TriviaQA/0000_output.jsonl",
+  "records": [
+    {
+      "automatedEvaluationResult": {
+        "scores": [
+          {
+            "metricName": "Builtin.Accuracy",
+            "result": 0.5531
+          }
+        ]
+      },
+      "inputRecord": {
+        "prompt": "Sokhumi is the capital of",
+        "referenceResponse": "Cantal"
+      },
+      "modelResponses": [
+        {
+          "modelIdentifier": "arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-text-lite-v1",
+          "response": " A short model response, invented for this exercise."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "_about": "The comparison claim you are evaluating, plus the conditions the claim's own wording puts in scope. 'claim_scoped_conditions' is a reading of the claim sentence -- each entry quotes the phrase in the claim that names it. It is NOT a statement that those conditions are material, and it carries no expected answer.",
+  "claim": "These two measurements can be read side by side as values of Builtin.Accuracy for the QuestionAndAnswer task type over the Builtin.BoolQ built-in dataset.",
+  "claim_scoped_conditions": [
+    {
+      "condition": "metric_name",
+      "quote": "Builtin.Accuracy"
+    },
+    {
+      "condition": "task_type",
+      "quote": "QuestionAndAnswer"
+    },
+    {
+      "condition": "dataset",
+      "quote": "Builtin.BoolQ"
+    }
+  ]
+}

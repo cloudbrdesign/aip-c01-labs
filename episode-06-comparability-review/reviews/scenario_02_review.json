@@ -1,0 +1,43 @@
+{
+  "_about": "Your review. Author it BEFORE running the checker.\nReplace every <FILL IN ...> marker. While any remain, the checker treats this review as not yet authored and checks nothing.\nOBSERVED and UNKNOWN are statements about what the supplied artifacts do and do not establish -- the checker verifies those against the artifacts.\nJUDGMENT, WOULD_COMPARE and BEFORE_COMPARING are yours. They are read for completeness and, where the claim itself settles the point, for internal consistency. They are never scored and there is no preferred answer.",
+  "scenario": "scenario_02",
+  "comparison_claim_restated": "<FILL IN: restate, in your own words, the comparison this scenario asks you to evaluate>",
+  "_claim_scope_note": "Which conditions does the claim's own wording name? Read the claim sentence and list them. A condition is in scope when the claim names it -- this is a reading of the sentence, not a judgement about whether it matters.",
+  "claim_puts_in_scope": [
+    "<FILL IN: condition names the claim itself names>"
+  ],
+  "_artifacts_note": "List exactly the artifact files this scenario supplies for each side. Valid values: result_record, job_summary, job_definition.",
+  "artifacts_i_hold": {
+    "a": [
+      "<FILL IN: artifact types supplied for measurement A>"
+    ],
+    "b": [
+      "<FILL IN: artifact types supplied for measurement B>"
+    ]
+  },
+  "_observed_note": "Conditions the supplied artifacts DO establish. status is 'same' or 'differs'. evidence entries look like a.job_definition. condition names: model, task_type, dataset, metric_name, evaluator_model, inference_parameters, reference_response_present",
+  "observed": [
+    {
+      "condition": "<FILL IN: condition name>",
+      "status": "<FILL IN: same | differs>",
+      "evidence": [
+        "<FILL IN: e.g. a.job_definition>",
+        "<FILL IN: e.g. b.job_definition>"
+      ],
+      "note": "<FILL IN: what you read, and where>"
+    }
+  ],
+  "_unknown_note": "Conditions the supplied artifacts do NOT establish. Leave the list empty if there are none. Recording something here is a finding, not a failure.",
+  "unknown": [],
+  "_judgment_note": "Your assessment. materiality is 'material', 'immaterial' or 'cannot_classify' -- relative to THIS comparison claim, not in general. The reasoning is the review.",
+  "judgment": [
+    {
+      "condition": "<FILL IN: condition name>",
+      "materiality": "<FILL IN: material | immaterial | cannot_classify>",
+      "reasoning": "<FILL IN: why this does or does not bear on the claim being made>"
+    }
+  ],
+  "_would_compare_note": "yes | no | not_without_addressing. Never scored.",
+  "would_compare": "<FILL IN: yes | no | not_without_addressing>",
+  "before_comparing": "<FILL IN: what you would control, retrieve or write down before treating these two values as a comparison>"
+}

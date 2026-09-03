@@ -1,0 +1,38 @@
+{
+  "_about": "Synthetic local artifact, course-authored. Shape follows the documented GetEvaluationJob response. Structure traces to SOURCE_MAP.json; the values are invented and are NOT observed AWS results.",
+  "jobName": "boolq-run-one",
+  "jobArn": "arn:aws:bedrock:us-west-2:111122223333:evaluation-job/abcdef012345",
+  "jobType": "Automated",
+  "status": "Completed",
+  "applicationType": "ModelEvaluation",
+  "creationTime": "2026-08-11T09:14:02Z",
+  "roleArn": "arn:aws:iam::111122223333:role/service-role/Amazon-Bedrock-IAM-Role-example",
+  "inferenceConfig": {
+    "models": [
+      {
+        "bedrockModel": {
+          "modelIdentifier": "arn:aws:bedrock:us-west-2::foundation-model/amazon.titan-text-lite-v1",
+          "inferenceParams": "{\"inferenceConfig\": {\"maxTokens\": 512, \"temperature\": 0.2, \"topP\": 0.9}}"
+        }
+      }
+    ]
+  },
+  "evaluationConfig": {
+    "automated": {
+      "datasetMetricConfigs": [
+        {
+          "taskType": "QuestionAndAnswer",
+          "dataset": {
+            "name": "Builtin.BoolQ"
+          },
+          "metricNames": [
+            "Builtin.Accuracy"
+          ]
+        }
+      ]
+    }
+  },
+  "outputDataConfig": {
+    "s3Uri": "s3://amzn-s3-demo-bucket/output/"
+  }
+}

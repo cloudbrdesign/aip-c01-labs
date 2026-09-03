@@ -1,0 +1,68 @@
+{
+  "_about": "Traceability for every AWS-derived shape used by this lab. It separates AWS-DOCUMENTED STRUCTURE (field names, nesting, output key template, response shape) from COURSE-AUTHORED VALUES (the specific strings and numbers in the scenarios). Every value in scenarios/ is invented for this exercise. None is an observed AWS result.",
+  "retrieved": "2026-09-04",
+  "aws_documented_structure": {
+    "result_record.s3_key": {
+      "source": "Amazon Bedrock User Guide - Understand how the results of your model evaluation job are saved in Amazon S3",
+      "documented_template": "s3://{{user-specified-S3-output-path}}/{{job-name}}/{{job-uuid}}/models/{{model-id}}/taskTypes/{{task-type}}/datasets/{{dataset}}/{{file-uuid}}_output.jsonl",
+      "tier": 2
+    },
+    "result_record.records[]": {
+      "source": "Amazon Bedrock User Guide - same page, worked example",
+      "documented_fields": ["automatedEvaluationResult.scores[].metricName", "automatedEvaluationResult.scores[].result", "inputRecord.prompt", "inputRecord.referenceResponse", "modelResponses[].modelIdentifier", "modelResponses[].response"],
+      "tier": 2
+    },
+    "job_summary": {
+      "source": "Amazon Bedrock API Reference - ListEvaluationJobs / EvaluationSummary",
+      "documented_fields": ["jobName", "jobType", "status", "applicationType", "creationTime", "evaluationTaskTypes", "evaluatorModelIdentifiers", "customMetricsEvaluatorModelIdentifiers", "inferenceConfigSummary.modelConfigSummary.bedrockModelIdentifiers", "inferenceConfigSummary.modelConfigSummary.precomputedInferenceSourceIdentifiers"],
+      "note": "EvaluationSummary does not carry the prompt dataset, the metric names, or the inference parameters.",
+      "tier": 2
+    },
+    "job_definition": {
+      "source": "Amazon Bedrock API Reference - GetEvaluationJob",
+      "documented_fields": ["jobName", "jobArn", "jobType", "status", "applicationType", "creationTime", "roleArn", "outputDataConfig.s3Uri", "evaluationConfig", "inferenceConfig"],
+      "note": "GetEvaluationJob returns evaluationConfig and inferenceConfig in full.",
+      "tier": 2
+    },
+    "inferenceConfig.models": {
+      "source": "Amazon Bedrock API Reference - EvaluationInferenceConfig",
+      "verbatim": "For automated model evaluation jobs, only a single model is supported. For human-based model evaluation jobs, your annotator can compare the responses for up to two different models. Array Members: Minimum number of 1 item. Maximum number of 2 items.",
+      "note": "Every scenario in this lab uses automated jobs, so every models array holds exactly one model.",
+      "tier": 2
+    },
+    "evaluationConfig.automated.datasetMetricConfigs[]": {
+      "source": "Amazon Bedrock User Guide - Starting an automatic model evaluation job (CLI/SDK examples)",
+      "documented_fields": ["taskType", "dataset.name", "metricNames"],
+      "tier": 2
+    },
+    "bedrockModel.inferenceParams": {
+      "source": "Amazon Bedrock User Guide - Starting an automatic model evaluation job (SDK for Python example)",
+      "documented_form": "a JSON string, e.g. {\"inferenceConfig\":{\"maxTokens\":512,\"temperature\":0.7,\"topP\":0.9}}",
+      "note": "Exposed only by the full job definition. Not present in the result record and not present in EvaluationSummary. This is the fact scenario_03 rests on.",
+      "tier": 2
+    }
+  },
+  "course_authored_values": {
+    "_note": "Invented for this exercise. Not observed AWS output. Realistic in shape only.",
+    "job_names": ["qa-eval-a", "qa-eval-b", "boolq-run-one", "boolq-run-two", "trivia-eval-first", "trivia-eval-second"],
+    "job_uuids": "invented 12-character hex-like strings, matching the documented ARN pattern shape",
+    "metric_values": "all score values are invented",
+    "prompts_and_responses": "invented; the prompt/referenceResponse pairs follow the shape of AWS's documented custom-dataset example",
+    "account_id": "111122223333 - AWS's own documentation placeholder account ID",
+    "bucket": "amzn-s3-demo-bucket - AWS's own documentation placeholder bucket name"
+  },
+  "model_and_dataset_identifiers": {
+    "_note": "Model identifiers and built-in dataset names are documented by AWS. They are used here as realistic values. This lab makes no claim about the behaviour, quality or suitability of any named model.",
+    "models": ["amazon.titan-text-lite-v1", "anthropic.claude-3-haiku-20240307-v1:0", "meta.llama3-1-70b-instruct-v1:0", "mistral.mistral-large-2402-v1:0"],
+    "datasets": ["Builtin.BoolQ", "Builtin.TriviaQA"],
+    "task_types": ["QuestionAndAnswer"],
+    "metric_names": ["Builtin.Accuracy", "Builtin.Robustness"]
+  },
+  "what_this_lab_does_not_encode": [
+    "any list of fields that must match for two evaluation results to be comparable",
+    "any materiality label for any difference in any scenario",
+    "any expected would-compare conclusion",
+    "any comparability score",
+    "any preferred or reference review"
+  ]
+}

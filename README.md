@@ -12,6 +12,7 @@ predict what it will do, run it, and find out where your model of the system was
 |---|---|---|
 | [`episode-03-response-contract/`](episode-03-response-contract/) | Episode 3 | An FM API interface, and a contract that can represent everything the API it wraps can return |
 | [`episode-05-measurement-design/`](episode-05-measurement-design/) | Episode 5 | A measurement instrument — what you evaluate, on what, and by what rule — checked against constraints AWS documents. **Local, $0, no AWS account.** |
+| [`episode-06-comparability-review/`](episode-06-comparability-review/) | Episode 6 | An engineering review of two finished measurements against a stated comparison claim — what the artifacts establish, what they do not, and which differences bear on the claim. **Local, $0, no AWS account.** |
 
 ## What these labs are like
 
